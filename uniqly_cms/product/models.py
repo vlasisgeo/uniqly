@@ -69,16 +69,18 @@ class Group(models.Model):
 
 class Group_product(models.Model):
     group  = models.ForeignKey(Group, on_delete=models.CASCADE) 
-    product_route  = models.ForeignKey(Product_route, on_delete=models.CASCADE) 
+    product  = models.ForeignKey(Product, on_delete=models.CASCADE) 
 
 
 class Offer(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)  
-    
+    route= models.ForeignKey(Route, on_delete=models.CASCADE) 
     group = models.ForeignKey(Group, on_delete=models.CASCADE) 
     active_from = models.DateTimeField(null=True, blank=True)  
     active_to = models.DateTimeField(null=True, blank=True)  
     active = models.BooleanField(default=False)  
+    discount = models.DecimalField(default = 0, max_digits=4, decimal_places=2)
+    
 
 
 class Vat(models.Model):
