@@ -1,10 +1,17 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-OFFER_TYPE_CHOICES = [
-    ('GIFT', 'Gift'),
-    
-]
+class Brand(models.Model):
+    name = models.CharField(max_length=250, null=True)  
+
+class Product(models.Model):
+    code = models.CharField(max_length=20, null=True)  
+    name = models.CharField(max_length=250, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+
 
 
 
@@ -23,9 +30,7 @@ class Attribute_value(models.Model):
     display_value = models.CharField(max_length=20, null=True)   
     active = models.BooleanField(default=True)  
 
-class Product_variant_attribute(models.Model):
-    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE)
-    product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE)
+
 
 class Product_variant(models.Model):    
     product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
@@ -34,22 +39,22 @@ class Product_variant(models.Model):
     factory_code = models.CharField(max_length=20, null=True)  
     weight = models.IntegerField(default=0, blank=True)
 
-
-class Product(models.Model):
-    code = models.CharField(max_length=20, null=True)  
-    name = models.CharField(max_length=250, null=True)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+class Product_variant_attribute(models.Model):
+    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE)
+    product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE)
 
 
-class Brand(models.Model):
-    name = models.CharField(max_length=250, null=True)  
+
+
+
+
+
+
 
 class Category(models.Model):
     name = models.CharField(max_length=250, null=True)  
-    parent =  models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null=True)
+    parent =  models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
+   
 
 
 class Product_Category(models.Model):
@@ -78,6 +83,14 @@ class Route(models.Model):
     zone = models.ForeignKey(Zone, on_delete=models.CASCADE) 
     warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE) 
 
+class Country(models.Model):
+    code = models.CharField(max_length=3) 
+    name = models.CharField(max_length=50)  
+
+class Vat(models.Model):
+    country = models.ForeignKey(Country, on_delete=models.CASCADE) 
+    code = models.CharField(max_length=10, null=True, blank=True)  
+    vat_percent = models.DecimalField(default = 0, max_digits=4, decimal_places=2)
 
 class Product_route(models.Model):
     product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE) 
@@ -87,17 +100,8 @@ class Product_route(models.Model):
     vat  = models.ForeignKey(Vat, on_delete=models.CASCADE) 
     active = models.BooleanField(default=False)
 
+ 
 
-
-    
-class Country(models.Model):
-    code = models.CharField(max_length=3) 
-    name = models.CharField(max_length=50)  
-
-class Vat(models.Model):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE) 
-    code = models.CharField(max_length=10, null=True, blank=True)  
-    vat_percent = models.DecimalField(default = 0, max_digits=4, decimal_places=2)
 
 
    

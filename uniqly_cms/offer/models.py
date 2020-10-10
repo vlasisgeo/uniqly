@@ -1,4 +1,9 @@
 from django.db import models
+OFFER_TYPE_CHOICES = [
+    ('GIFT', 'Gift'),
+    
+]
+
 
 class Group(models.Model):
     name = models.CharField(max_length=250, null=True, blank=True)  
