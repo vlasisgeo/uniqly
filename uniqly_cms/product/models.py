@@ -43,19 +43,9 @@ class Product_variant_attribute(models.Model):
     attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE)
     product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE)
 
-
-
-
-
-
-
-
-
 class Category(models.Model):
     name = models.CharField(max_length=250, null=True)  
     parent =  models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
-   
-
 
 class Product_Category(models.Model):
     product =  models.ForeignKey(Product, on_delete=models.CASCADE)
