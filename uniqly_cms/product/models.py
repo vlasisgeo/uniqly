@@ -1,8 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
+
 
 class Brand(models.Model):
     name = models.CharField(max_length=250, null=True)  
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Brand, self).save(*args, **kwargs)
 
 class Product(models.Model):
     code = models.CharField(max_length=20, null=True)  
@@ -11,7 +18,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    slug = models.SlugField(unique=True)
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Product, self).save(*args, **kwargs)
 
 
 
@@ -46,6 +57,11 @@ class Product_variant_attribute(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=250, null=True)  
     parent =  models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
+    slug = models.SlugField(unique=True)
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Category, self).save(*args, **kwargs)
 
 class Product_Category(models.Model):
     product =  models.ForeignKey(Product, on_delete=models.CASCADE)
