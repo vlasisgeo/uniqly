@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Product, Brand
+from .models import Product, Brand, Product_variant, Product_variant_attribute, Attribute_value
 from rest_framework import serializers
 
 
@@ -15,13 +15,37 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
+#Attribute_value
+class Attribute_valueSerializer(serializers.ModelSerializer):  
     class Meta:
-        model = Product
-        fields = ['code', 'name', 'brand']
+        model = Attribute_value
+        fields = ['display_value', 'attribute_group', 'active']
 
-class BrandSerializer(serializers.HyperlinkedModelSerializer):
+#Product_variant
+class Product_variant_attributeSerializer(serializers.ModelSerializer):  
+    product_variant_attribute_values = Attribute_valueSerializer(many=True, read_only=True)
+    class Meta:
+        model = Product_variant_attribute
+        fields = ['attribute_value', 'product_variant_attribute_values']
+
+class Product_variantSerializer(serializers.ModelSerializer): 
+    #product_variant_attribute_values = Product_variant_attributeSerializer(many=True, read_only=True)
+    product_variant_attributes = Product_variant_attributeSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Product_variant
+        fields = ['variant_code', 'barcode', 'weight',  'product_variant_attributes']
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    product_variants = Product_variantSerializer(many=True, read_only=True)
+
     class Meta:
         model = Product
-        fields = ['name']
+        fields = ['code', 'name', 'brand', 'slug', 'product_variants']
+
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['name', 'slug']
 

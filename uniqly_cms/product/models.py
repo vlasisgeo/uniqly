@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 class Brand(models.Model):
     name = models.CharField(max_length=250, null=True)  
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, default='')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
@@ -18,12 +18,20 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, default='')
+
+    def _generate_unique_slug(self):
+        unique_slug = slugify(self.name)
+        num = 1
+        while Product.objects.filter(slug=unique_slug).exists():
+            unique_slug = '{}-{}'.format(unique_slug, num)
+            num += 1
+        return unique_slug
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Product, self).save(*args, **kwargs)
-
+        if not self.slug:
+            self.slug = self._generate_unique_slug()
+        super().save(*args, **kwargs)
 
 
 DISPLAY_TYPE_CHOICES = [
@@ -44,20 +52,20 @@ class Attribute_value(models.Model):
 
 
 class Product_variant(models.Model):    
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True, null=True, related_name='product_variants')
     variant_code =models.CharField(max_length=30, null=True)
     barcode = models.CharField(max_length=30, null=True)
     factory_code = models.CharField(max_length=20, null=True)  
     weight = models.IntegerField(default=0, blank=True)
 
 class Product_variant_attribute(models.Model):
-    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE)
-    product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE)
+    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE, related_name='product_variant_attribute_values')
+    product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE, related_name='product_variant_attributes')
 
 class Category(models.Model):
-    name = models.CharField(max_length=250, null=True)  
+    name = models.CharField(max_length=250, null=True)
     parent =  models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, default='')
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)

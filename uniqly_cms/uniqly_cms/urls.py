@@ -23,6 +23,9 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'products', views.ProductViewSet)
+router.register(r'product_variants', views.Product_variantViewSet)
+router.register(r'product_variant_attributes', views.Product_variant_attributeViewSet)
+router.register(r'product_variant_attribute_values', views.Attribute_valueViewSet)
 router.register(r'brands', views.BrandViewSet)
 
 

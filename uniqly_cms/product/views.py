@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
 from django.contrib.auth.models import User, Group
-from .models import  Product, Brand
+from .models import  Product, Brand, Product_variant, Product_variant_attribute, Attribute_value
 from rest_framework import viewsets
 from rest_framework import permissions
-from .serializers import UserSerializer, GroupSerializer, ProductSerializer, BrandSerializer
+from .serializers import UserSerializer, GroupSerializer, ProductSerializer, BrandSerializer, Product_variantSerializer, Product_variant_attributeSerializer, Attribute_valueSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -24,6 +24,13 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+class Product_variantViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Product_variant.objects.all()
+    serializer_class = Product_variantSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
@@ -31,6 +38,22 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class Product_variant_attributeViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Product_variant_attribute.objects.all()
+    serializer_class = Product_variant_attributeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class Attribute_valueViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset =Attribute_value.objects.all()
+    serializer_class = Attribute_valueSerializer
     permission_classes = [permissions.IsAuthenticated]
 
 class BrandViewSet(viewsets.ModelViewSet):
