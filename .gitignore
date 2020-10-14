@@ -1,2 +1,12 @@
 /venv
 /db.sqlite3
+*migrations
+*_pycache_
+*.pyc
+*sqlite3
+*__pycache__
+
+uniqly_cms/db.sqlite3
+uniqly_cms/uniqly_cms/__pycache__/
+uniqly_cms/uniqly_cms/__pycache__/
+

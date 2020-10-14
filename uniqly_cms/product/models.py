@@ -45,7 +45,7 @@ class Attribute_group(models.Model):
     active = models.BooleanField(default=True)  
 
 class Attribute_value(models.Model):
-    attribute_group = models.ForeignKey(Attribute_group, on_delete=models.CASCADE)
+    attribute_group = models.ForeignKey(Attribute_group, on_delete=models.CASCADE, related_name='attribute_group_values')
     display_value = models.CharField(max_length=20, null=True)   
     active = models.BooleanField(default=True)  
 
@@ -59,7 +59,7 @@ class Product_variant(models.Model):
     weight = models.IntegerField(default=0, blank=True)
 
 class Product_variant_attribute(models.Model):
-    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE, related_name='product_variant_attribute_values')
+    attribute_value = models.ForeignKey(Attribute_value, on_delete=models.CASCADE, related_name='product_variant_attributes_values')
     product_variant = models.ForeignKey(Product_variant, on_delete=models.CASCADE, related_name='product_variant_attributes')
 
 class Category(models.Model):
