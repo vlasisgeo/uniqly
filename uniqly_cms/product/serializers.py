@@ -49,14 +49,17 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ['code', 'name', 'brand', 'slug', 'product_variants']
 
 class BrandSerializer(serializers.ModelSerializer):
+    brand_products = ProductSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ['name', 'slug']
+        fields = ['name', 'slug', 'brand_products']
+        
 
-class CategorySerializer(serializers.ModelSerializer):    
+class CategorySerializer(serializers.ModelSerializer): 
+    
     class Meta:
         model = Category
-        fields = ['name', 'slug', 'parent', 'active', 'category_products']
+        fields = ['name', 'slug', 'parent', 'active']
         depth=2
 class Product_categorySerializer(serializers.ModelSerializer):   
     class Meta:

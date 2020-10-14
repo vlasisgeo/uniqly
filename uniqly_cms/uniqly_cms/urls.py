@@ -28,6 +28,7 @@ router.register(r'product_variant_attributes', views.Product_variant_attributeVi
 router.register(r'attribute_values', views.Attribute_valueViewSet)
 router.register(r'attribute_group', views.Attribute_groupViewSet)
 router.register(r'brands', views.BrandViewSet)
+router.register(r'brand/<str:pk>/', views.BrandViewSet)
 router.register(r'categories', views.CategoryViewSet)
 router.register(r'product_category', views.Product_categoryViewSet)
 

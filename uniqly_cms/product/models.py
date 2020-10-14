@@ -14,7 +14,7 @@ class Brand(models.Model):
 class Product(models.Model):
     code = models.CharField(max_length=20, null=True)  
     name = models.CharField(max_length=250, null=True)
-    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True)
+    brand = models.ForeignKey(Brand, on_delete=models.CASCADE, blank=True, null=True, related_name='brand_products')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
