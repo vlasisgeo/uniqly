@@ -66,13 +66,14 @@ class Category(models.Model):
     name = models.CharField(max_length=250, null=True)
     parent =  models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
     slug = models.SlugField(unique=True, default='')
+    active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
 class Product_Category(models.Model):
-    product =  models.ForeignKey(Product, on_delete=models.CASCADE)
+    product =  models.ForeignKey(Product, on_delete=models.CASCADE, related_name='category_products')
     category =  models.ForeignKey(Category, on_delete=models.CASCADE)
 
 

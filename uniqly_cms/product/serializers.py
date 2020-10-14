@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Product, Brand, Product_variant, Product_variant_attribute, Attribute_value, Attribute_group
+from .models import Product, Brand, Product_variant, Product_variant_attribute, Attribute_value, Attribute_group, Category, Product_Category
 from rest_framework import serializers
 
 
@@ -43,7 +43,7 @@ class Product_variantSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     product_variants = Product_variantSerializer(many=True, read_only=True)
-
+    #product_variants = Product_variantSerializer(many=True, read_only=True)
     class Meta:
         model = Product
         fields = ['code', 'name', 'brand', 'slug', 'product_variants']
@@ -53,3 +53,13 @@ class BrandSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['name', 'slug']
 
+class CategorySerializer(serializers.ModelSerializer):    
+    class Meta:
+        model = Category
+        fields = ['name', 'slug', 'parent', 'active', 'category_products']
+        depth=2
+class Product_categorySerializer(serializers.ModelSerializer):   
+    class Meta:
+        model = Product_Category
+        fields = ['product', 'category']
+        depth = 1
